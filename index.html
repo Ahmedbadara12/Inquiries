@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول الشكاوى</title>
+    <style>
+        /* Custom CSS for vertical table on small screens */
+        @media (max-width: 767.98px) {
+            #example thead {
+                display: none;
+            }
+
+            #example tbody tr {
+                display: block;
+                margin-bottom: 1rem;
+                border: 1px solid #dee2e6;
+                border-radius: 0.25rem;
+            }
+
+            #example tbody td {
+                display: block;
+                text-align: right;
+                padding: 0.5rem;
+                border-bottom: 1px solid #dee2e6;
+            }
+
+            #example tbody td::before {
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            #example tbody td:last-child {
+                border-bottom: none;
+            }
+        }
+
+        /* Style for the total inquiries section */
+        .total-inquiries {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 0.25rem;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table id="example" class="table table-striped py-5 px-5" style="width:100%">
+            <thead>
+                <tr>
+                    <th>الاسم</th>
+                    <th>العنوان</th>
+                    <th>الاستفسار</th>
+                    <th>رقم الهاتف</th>
+                    <th>تاريخ التسجيل</th>
+                    <th>الايميل</th>
+                    <th>الإجراء</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="الاسم">أحمد محمد</td>
+                    <td data-label="العنوان">مهندس نظم</td>
+                    <td data-label="الاستفسار">شكوى في النظام</td>
+                    <td data-label="رقم الهاتف">01012345678</td>
+                    <td data-label="تاريخ التسجيل">2023-01-15</td>
+                    <td data-label="الايميل">ahmed@example.com</td>
+                    <td data-label="الإجراء">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#complaintModal">
+                            الرد على الشكوى
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td data-label="الاسم">فاطمة علي</td>
+                    <td data-label="العنوان">محاسبة</td>
+                    <td data-label="الاستفسار">مشكلة في الرواتب</td>
+                    <td data-label="رقم الهاتف">01123456789</td>
+                    <td data-label="تاريخ التسجيل">2023-02-20</td>
+                    <td data-label="الايميل">fatima@example.com</td>
+                    <td data-label="الإجراء">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#complaintModal">
+                            الرد على الشكوى
+                        </button>
+                    </td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+
+        <!-- Total Inquiries Section -->
+        <div class="total-inquiries">
+            إجمالي عدد الاستفسارات: <span id="totalInquiries">0</span>
+        </div>
+    </div>
+
+    <!-- Modal for Complaint Response -->
+    <div class="modal fade" id="complaintModal" tabindex="-1" aria-labelledby="complaintModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="complaintModalLabel">الرد على الشكوى</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="complaintName" class="form-label">الاسم</label>
+                            <input type="text" class="form-control" id="complaintName" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="complaintEmail" class="form-label">البريد الإلكتروني</label>
+                            <input type="email" class="form-control" id="complaintEmail" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="complaintPhone" class="form-label">رقم الهاتف</label>
+                            <input type="text" class="form-control" id="complaintPhone" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="complaintDetails" class="form-label">تفاصيل الشكوى</label>
+                            <textarea class="form-control" id="complaintDetails" rows="3" readonly></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="responseText" class="form-label">الرد على الشكوى</label>
+                            <textarea class="form-control" id="responseText" rows="3" placeholder="اكتب ردك هنا..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                    <button type="button" class="btn btn-primary">إرسال الرد</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // JavaScript to populate modal with data and calculate total inquiries
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('complaintModal');
+            modal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget; // Button that triggered the modal
+                const row = button.closest('tr'); // Get the closest row
+                const cells = row.querySelectorAll('td'); // Get all cells in the row
+
+                // Populate modal inputs
+                document.getElementById('complaintName').value = cells[0].textContent;
+                document.getElementById('complaintEmail').value = cells[5].textContent;
+                document.getElementById('complaintPhone').value = cells[3].textContent;
+                document.getElementById('complaintDetails').value = cells[2].textContent;
+            });
+
+            // Calculate and display total inquiries
+            const tableRows = document.querySelectorAll('#example tbody tr');
+            const totalInquiries = tableRows.length;
+            document.getElementById('totalInquiries').textContent = totalInquiries;
+        });
+    </script>
+</body>
+</html>
